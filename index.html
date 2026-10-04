@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>San Carlo Borromeo — App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#006B35;--blu:#273455;--oro:#C9A84C;--rosso:#B23A3A;
+  --paper:#F1F4F0;--card:#FFFFFF;--ink:#1C2333;--muted:#5C6577;--line:#DCE2DA;--chip:#E5EBE4;
+  --okbg:rgba(0,107,53,.12);--okfg:#006B35;--wa:#1F9D55;
+  color-scheme:light;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.22'/></svg>");
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#111725;--card:#192133;--ink:#EDF1EC;--muted:#98A2B5;--line:#2A3448;--chip:#222C41;--okbg:rgba(76,196,135,.16);--okfg:#5ED39A;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#111725;--card:#192133;--ink:#EDF1EC;--muted:#98A2B5;--line:#2A3448;--chip:#222C41;--okbg:rgba(76,196,135,.16);--okfg:#5ED39A;color-scheme:dark}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--oro);outline-offset:2px;border-radius:6px}
+.disp{font-family:'Bebas Neue','Oswald','Arial Narrow',Impact,sans-serif;font-weight:400;letter-spacing:.01em;line-height:.92}
+.wrap{max-width:560px;margin:0 auto;min-height:100%}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--blu);background-image:var(--grain);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:11px}
+.top.coach{background-color:#1F4A3A}
+.top.fam{background-color:var(--verde)}
+.crest{width:36px;height:36px;border-radius:50%;background:var(--verde);display:grid;place-items:center;border:2px solid var(--oro);flex:none;font-family:'Bebas Neue',Impact,sans-serif;font-size:18px;padding-top:2px}
+.top.fam .crest{background:var(--blu)}
+.top h1{margin:0;font-size:24px}
+.who{margin-left:auto;background:rgba(255,255,255,.13);border:0;color:#fff;border-radius:12px;padding:7px 11px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:6px;max-width:52%;text-align:left;line-height:1.15}
+.who small{display:block;font-weight:300;opacity:.8;font-size:11.5px}
+main{padding:16px 16px 110px}
+
+.hero{position:relative;overflow:hidden;border-radius:22px;background:var(--verde);color:#fff;padding:20px;isolation:isolate}
+.hero.volley{background:var(--blu)}
+.hero::after{content:"";position:absolute;inset:0;background-image:var(--grain);z-index:-1;pointer-events:none}
+.hero svg.lines{position:absolute;right:-90px;top:-40px;width:340px;z-index:-1;opacity:.28;transform:rotate(-14deg)}
+.hero .when{font-size:14px;opacity:.88}
+.hero .vs{font-size:50px;margin:10px 0 6px}
+.hero .vs i{font-style:normal;color:var(--oro);font-size:.6em;vertical-align:.22em;margin:0 .15em}
+.hero .meta{font-size:14.5px;font-weight:300;opacity:.92}
+.hero .row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.tag{display:inline-block;font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.16);margin-right:4px}
+
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:500;font-size:15px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;justify-content:center}
+.btn.pri{background:var(--verde);color:#fff}.btn.blu{background:var(--blu);color:#fff}
+.btn.light{background:#fff;color:var(--blu)}.btn.line{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn.wa{background:var(--wa);color:#fff}.btn.full{width:100%}.btn.sm{padding:6px 11px;font-size:13.5px;border-radius:10px}
+.btn.no{background:transparent;border:1.5px solid rgba(255,255,255,.6);color:#fff}
+
+h2.sec{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:30px;margin:26px 0 10px;line-height:1}
+h2.sec.first{margin-top:2px}
+.sub{color:var(--muted);font-size:14px;margin:-4px 0 12px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;text-align:left;width:100%}
+.item .stripe{width:4px;align-self:stretch;border-radius:4px;flex:none}
+.item .body{flex:1;min-width:0}
+.item .t{font-weight:500;font-size:15px;line-height:1.25}
+.item .m{font-size:13px;color:var(--muted);margin-top:2px}
+.item .score{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;line-height:1;flex:none}
+.pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.pill{font-size:12px;font-weight:500;padding:3px 9px;border-radius:99px;background:var(--chip);color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--okbg);color:var(--okfg)}.pill.warn{background:var(--oro);color:#1C2333}.pill.bad{background:var(--rosso);color:#fff}
+.daylbl{font-size:13px;font-weight:500;color:var(--muted);margin:16px 2px 6px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:12px}
+.chips.wrapc{flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:6px 13px;font-size:14px;white-space:nowrap}
+.chip.on{background:var(--blu);border-color:var(--blu);color:#fff}
+.chip.on.c{background:var(--verde);border-color:var(--verde)}
+.seg{display:flex;background:var(--chip);border-radius:12px;padding:3px;margin:4px 0 14px}
+.seg button{flex:1;border:0;background:transparent;padding:8px 6px;border-radius:9px;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.teamhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-end;margin-bottom:12px}
+.teamhead .disp{font-size:40px}
+.teamhead small{color:var(--muted);font-size:13.5px;display:block;text-align:right}
+
+.todo{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.todo button{width:100%;background:transparent;border:0;border-top:1px solid var(--line);padding:13px 14px;display:flex;gap:12px;align-items:center;text-align:left}
+.todo button:first-child{border-top:0}
+.todo .n{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;width:34px;text-align:center;line-height:1;flex:none}
+.todo .x{flex:1;font-size:15px}
+
+.roster{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ath{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--line);width:100%;background:transparent;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.ath:first-child{border-top:0}
+.ath input{width:20px;height:20px;accent-color:var(--verde);flex:none}
+.ath .n{flex:1;min-width:0}
+.ath .n small{display:block;color:var(--muted);font-size:12.5px}
+.ath .num{font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;color:var(--muted);width:24px;text-align:right;flex:none}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field>label{font-size:13.5px;font-weight:500;color:var(--muted)}
+.field input,.field textarea,.field select{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;width:100%}
+.field textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preview{background:var(--chip);border-radius:14px;padding:14px;font-size:14.5px;white-space:pre-wrap}
+.scroller{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.note{font-size:13px;color:var(--muted);line-height:1.45}
+.notebox{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:10px 14px;font-size:13.5px;color:var(--muted);margin-bottom:14px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--oro);flex:none;margin-top:6px}
+
+.scorebox{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.side{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;text-align:center}
+.side .lbl{font-size:13px;color:var(--muted);min-height:2.6em}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;font-size:20px;line-height:1}
+.stepper output{font-family:'Bebas Neue',Impact,sans-serif;font-size:54px;min-width:40px;text-align:center;line-height:1}
+.igframe{background:#000;border-radius:16px;padding:10px;display:flex;justify-content:center}
+.igframe svg{width:100%;height:auto;border-radius:8px;display:block}
+.igframe.story svg{width:auto;max-width:100%;height:500px}
+
+.folder{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.folder>button{width:100%;background:transparent;border:0;display:flex;align-items:center;gap:12px;padding:14px;text-align:left}
+.fi{width:36px;height:36px;border-radius:10px;background:var(--chip);display:grid;place-items:center;flex:none}
+.file{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);width:100%;background:transparent;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.ext{font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;color:#fff;flex:none}
+.file .body{flex:1;min-width:0;font-size:14.5px}
+.file .body small{display:block;color:var(--muted);font-size:12.5px}
+
+.kcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.kcard .who2{font-size:15px;margin-bottom:12px}
+.kcard .resp{display:flex;gap:8px}
+.kcard .resp .btn{flex:1}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;font-size:14.5px;align-items:center}
+.dl dt{color:var(--muted)}
+.dl dd{margin:0;text-align:right;display:flex;justify-content:flex-end}
+
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav .in{max-width:560px;margin:0 auto;display:grid}
+.nav button{background:transparent;border:0;padding:9px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--muted)}
+.nav button.on{color:var(--okfg);font-weight:700}
+.nav svg{width:23px;height:23px}
+
+.scrim{position:fixed;inset:0;background:rgba(10,15,28,.5);z-index:40;display:none}
+.scrim.open{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;background:var(--paper);border-radius:22px 22px 0 0;max-height:92%;overflow:auto;padding:8px 18px calc(22px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .28s ease}
+.sheet.open{transform:none}
+.grab{width:42px;height:5px;border-radius:5px;background:var(--line);margin:4px auto 12px}
+.sheet h3{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:32px;margin:0 0 14px;line-height:1}
+.chan{display:flex;gap:8px;flex-wrap:wrap}
+.chan label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 12px;font-size:14.5px;font-weight:500}
+.chan input{accent-color:var(--verde);width:18px;height:18px}
+.done{text-align:center;padding:10px 0 4px}
+.done .big{font-family:'Bebas Neue',Impact,sans-serif;font-size:60px;line-height:1;color:var(--okfg)}
+.stack{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.roleopt{width:100%;display:flex;gap:12px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;margin-bottom:8px}
+.roleopt.on{border-color:var(--verde)}
+.roleopt .sw{width:12px;height:36px;border-radius:6px;flex:none}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--blu);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:60;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.empty{text-align:center;color:var(--muted);padding:22px 10px;font-size:14.5px}
+@media (prefers-reduced-motion:reduce){.sheet,.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top" id="top"></header>
+  <main id="main"></main>
+</div>
+<nav class="nav" aria-label="Sezioni"><div class="in" id="nav"></div></nav>
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></section>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ================= DATI DI ESEMPIO ================= */
+const TEAMS=[
+  {id:'u10',name:'Under 10',sport:'calcio',champ:'Polisportivo CSI Como'},
+  {id:'u13',name:'Under 13',sport:'volley',champ:'Pallavolo CSI Como'},
+  {id:'u22',name:'Under 22',sport:'volley',champ:'Pallavolo CSI Milano'},
+  {id:'mv',name:'Minivolley',sport:'volley',champ:null}
+];
+const COACHES=[{id:'c1',name:'Marco Riva',teams:['u10']},{id:'c2',name:'Elena Sala',teams:['u13','mv']},{id:'c3',name:'Paolo Galli',teams:['u22']}];
+const FAM={id:'f1',name:'Famiglia Brambilla',kids:['sofia','luca']};
+const FIRST=['Luca','Giulia','Matteo','Aurora','Tommaso','Alice','Leonardo','Emma','Pietro','Martina','Davide','Chiara','Andrea','Sara','Gabriele','Anna','Riccardo','Greta'];
+const LAST=['Colombo','Galli','Riva','Molteni','Fumagalli','Cattaneo','Mauri','Longoni','Sala','Pozzi','Viganò','Terraneo','Corbetta','Ballabio','Mariani','Bonfanti'];
+const PAR=['Laura','Paolo','Silvia','Marco','Elisa','Stefano','Monica','Andrea'];
+const pad=n=>String(n).padStart(2,'0');
+const today=new Date();today.setHours(0,0,0,0);
+const iso=o=>{const x=new Date(today);x.setDate(x.getDate()+o);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())};
+const HOME={calcio:"Campo dell'oratorio, Inverigo",volley:'Palestra, Inverigo'};
+
+function seed(){
+  const yrs={u10:[2017,2018],u13:[2014,2015],u22:[2005,2008],mv:[2018,2020]},sizes={u10:12,u13:11,u22:10,mv:9};
+  const athletes=[];let k=0;
+  TEAMS.forEach((t,ti)=>{for(let i=0;i<sizes[t.id];i++){
+    let f=FIRST[(i*5+ti*7)%FIRST.length],l=LAST[(i*7+ti*3)%LAST.length],id='a'+(k++);
+    if(t.id==='u13'&&i===3){f='Sofia';l='Brambilla';id='sofia'}
+    if(t.id==='u10'&&i===5){f='Luca';l='Brambilla';id='luca'}
+    if(l==='Brambilla'&&id!=='sofia'&&id!=='luca')l='Brenna';
+    const span=yrs[t.id][1]-yrs[t.id][0]+1;
+    athletes.push({id,team:t.id,name:f+' '+l,num:i+1,born:yrs[t.id][0]+(i%span),
+      parent:(id==='sofia'||id==='luca'?'Laura':PAR[(i+ti)%PAR.length])+' '+l,
+      phone:'+39 3'+(40+ti)+' '+String(1000000+((k*7919)%8999999)).slice(0,7),
+      email:(f+'.'+l).toLowerCase().replace(/[^a-z.]/g,'')+'@esempio.it',
+      tess:i%6===4?'da completare':'attiva',
+      cert:i%7===0?iso(-10):i%5===1?iso(18):iso(120+i*9),
+      quota:i%4===2?'da versare':i%3===0?'1ª rata versata':'saldata'});
+  }});
+  const sofia=athletes.find(a=>a.id==='sofia');sofia.cert=iso(18);sofia.quota='1ª rata versata';sofia.tess='attiva';
+  const luca=athletes.find(a=>a.id==='luca');luca.tess='attiva';luca.cert=iso(200);luca.quota='saldata';
+  const ros=t=>athletes.filter(a=>a.team===t).map(a=>a.id);
+  const E=(team,type,off,time,opp,isHome,extra)=>{const s=TEAMS.find(t=>t.id===team).sport;
+    return Object.assign({id:'e'+Math.random().toString(36).slice(2,8),team,type,date:iso(off),time,opponent:opp||'',home:!!isHome,
+      place:type!=='partita'||isHome?HOME[s]:'Trasferta, '+opp.split(' ').slice(-1)[0],score:null,conv:null,title:''},extra||{})};
+  const u10ids=ros('u10'),u13ids=ros('u13');
+  const resp10={};u10ids.forEach((id,i)=>{if(id==='luca'||i===8||i===10)return;resp10[id]=i===2?'no':'si'});
+  const conv13ids=u13ids.filter((_,i)=>i!==9),resp13={};conv13ids.forEach((id,i)=>{if(id==='sofia'||i%4===1)return;resp13[id]='si'});
+  const events=[
+    E('u10','partita',-6,'10:30','Oratorio Arosio',true,{score:[3,2]}),
+    E('u13','partita',-5,'15:00','Pallavolo Lurago',true,{score:[3,1]}),
+    E('u22','partita',-2,'21:00','Volley Alzate',true),
+    E('u13','partita',-1,'16:00','Volley Lambrugo',false),
+    E('u10','partita',1,'10:30','Oratorio Brenna',true,{conv:{sent:true,ids:u10ids,resp:resp10,ritrovo:'09:45, al campo',nota:'Maglia verde'}}),
+    E('u13','partita',2,'15:00','Polisportiva Arosio',false,{conv:{sent:true,ids:conv13ids,resp:resp13,ritrovo:"14:00, davanti all'oratorio",nota:''}}),
+    E('u10','allenamento',3,'17:00'),E('u13','allenamento',3,'18:30'),E('mv','allenamento',4,'16:45'),
+    E('u22','allenamento',4,'20:30'),E('u10','allenamento',5,'17:00'),E('u13','allenamento',6,'18:30'),E('mv','allenamento',6,'16:45'),
+    E('u22','partita',7,'21:00','Pallavolo Seregno',false),
+    E('u10','partita',8,'10:00','US Lurago',false),
+    E('mv','evento',12,'15:00','',true,{title:'Festa di inizio anno del minivolley'})
+  ];
+  const posts=[
+    {id:'p1',kind:'Comunicato',title:'Assemblea delle famiglie di inizio stagione',text:"Vi aspettiamo in oratorio per presentare la stagione, gli allenatori e il patto educativo. Sarà presente anche il parroco.",aud:{scope:'tutti',ids:[]},at:iso(-4),from:'Dirigenza'},
+    {id:'p2',kind:'Avviso',title:'Allenamento del giovedì: nuovo orario',text:"Da questa settimana l'allenamento del giovedì inizia alle 18:30.",aud:{scope:'cat',ids:['u13']},at:iso(-2),from:'Elena Sala'},
+    {id:'p3',kind:'Avviso',title:'Ritiro kit maglia e tuta',text:'Il kit si ritira in segreteria prima dell\'allenamento, portate la ricevuta della quota.',aud:{scope:'cat',ids:['u10']},at:iso(-3),from:'Dirigenza'},
+    {id:'p4',kind:'Avviso',title:'Certificato medico in scadenza',text:'Il certificato medico di Sofia scade tra meno di un mese. Potete caricare quello nuovo dal Profilo.',aud:{scope:'atl',ids:['sofia']},at:iso(-1),from:'Segreteria'},
+    {id:'p5',kind:'Avviso',title:'Riunione allenatori',text:'Lunedì alle 21 in oratorio: calendari, palestre e materiale.',aud:{scope:'staff',ids:[]},at:iso(-1),from:'Dirigenza'}
+  ];
+  const D=(name,ext,aud,off,extra)=>Object.assign({id:'d'+Math.random().toString(36).slice(2,8),name,ext,aud,at:iso(off),from:'Dirigenza',isNew:false},extra||{});
+  const docs=[
+    D('Regolamento interno ASD','PDF',{scope:'tutti',ids:[]},-20),D('Patto educativo famiglie','PDF',{scope:'tutti',ids:[]},-20),D('Informativa privacy','PDF',{scope:'tutti',ids:[]},-25),
+    D('Calendario polisportivo CSI Como Under 10','PDF',{scope:'cat',ids:['u10']},-10),D('Calendario CSI Como pallavolo Under 13','PDF',{scope:'cat',ids:['u13']},-9),
+    D('Calendario CSI Milano pallavolo Under 22','PDF',{scope:'cat',ids:['u22']},-9),D('Programma attività minivolley','PDF',{scope:'cat',ids:['mv']},-12),
+    D('Tessera CSI Sofia Brambilla','PDF',{scope:'atl',ids:['sofia']},-15),D('Ricevuta 1ª rata Sofia','PDF',{scope:'atl',ids:['sofia']},-15),D('Tessera CSI Luca Brambilla','PDF',{scope:'atl',ids:['luca']},-15),
+    D('Linee guida tutela minori per allenatori','PDF',{scope:'staff',ids:[]},-18),
+    D('Presenze allenamenti settembre Under 13','XLS',{scope:'dir',ids:[]},-1,{from:'Elena Sala',fromId:'c2',team:'u13',isNew:true}),
+    D('Richiesta palloni e casacche','DOC',{scope:'dir',ids:[]},-3,{from:'Marco Riva',fromId:'c1',team:'u10',isNew:false})
+  ];
+  return {athletes,events,posts,docs};
+}
+
+let S;try{S=JSON.parse(localStorage.getItem('sancarlo-v2'))}catch(e){S=null}
+if(!S||!S.posts)S=seed();
+const save=()=>{try{localStorage.setItem('sancarlo-v2',JSON.stringify(S))}catch(e){}};
+
+/* ================= UTILITÀ ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const team=id=>TEAMS.find(t=>t.id===id);
+const ath=id=>S.athletes.find(a=>a.id===id);
+const ev=id=>S.events.find(e=>e.id===id);
+const dt=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const days=s=>Math.round((dt(s)-today)/864e5);
+const fmtDay=s=>{const n=days(s);if(n===0)return'Oggi';if(n===1)return'Domani';if(n===-1)return'Ieri';const t=dt(s).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});return t[0].toUpperCase()+t.slice(1)};
+const fmtShort=s=>dt(s).toLocaleDateString('it-IT',{day:'numeric',month:'short'});
+const fmtLong=s=>dt(s).toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+const sColor=t=>team(t).sport==='calcio'?'var(--verde)':'var(--blu)';
+const mTitle=e=>e.type==='evento'?e.title:e.type==='allenamento'?'Allenamento':e.home?`San Carlo – ${e.opponent}`:`${e.opponent} – San Carlo`;
+const sortAsc=(a,b)=>(a.date+a.time).localeCompare(b.date+b.time);
+const certSt=a=>{const n=days(a.cert);return n<0?['bad','Certificato scaduto']:n<=30?['warn','Certificato in scadenza']:['ok','Certificato valido']};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2800)}
+
+const IC={
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  ball:'<circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-2.5 15 0 18M3.5 9.5c4 1.5 13 1.5 17 0M4 15.5c4-1 12-1 16 0"/>',
+  id:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.3"/><path d="M5.5 16c.6-1.6 2-2.4 3.5-2.4s2.9.8 3.5 2.4M15 10h3.5M15 13.5h3.5"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  doc:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  users:'<circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.6 3 5.2"/>',
+  up:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.3-7 8-7s7 2.5 8 7"/>',
+  ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor"/>',
+  chev:'<path d="M6 9l6 6 6-6"/>'
+};
+const ico=(k,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+const LINES={calcio:`<svg class="lines" viewBox="0 0 300 200" fill="none" stroke="#fff" stroke-width="2.5" aria-hidden="true"><rect x="5" y="5" width="290" height="190"/><path d="M150 5v190"/><circle cx="150" cy="100" r="32"/><rect x="5" y="55" width="45" height="90"/><rect x="250" y="55" width="45" height="90"/></svg>`,
+  volley:`<svg class="lines" viewBox="0 0 300 160" fill="none" stroke="#fff" stroke-width="2.5" aria-hidden="true"><rect x="5" y="5" width="290" height="150"/><path d="M150 0v160" stroke-width="5"/><path d="M100 5v150M200 5v150"/></svg>`};
+
+/* ================= RUOLI E PERMESSI ================= */
+let P='dir';
+const role=()=>P==='dir'?'dir':P==='fam'?'fam':'coach';
+const coach=()=>COACHES.find(c=>c.id===P);
+const kids=()=>FAM.kids.map(ath);
+const myTeams=()=>role()==='dir'?TEAMS.map(t=>t.id):role()==='coach'?coach().teams:[...new Set(kids().map(k=>k.team))];
+function canSee(a){
+  const r=role();if(r==='dir')return true;
+  if(a.scope==='tutti')return true;
+  if(a.scope==='cat')return a.ids.some(t=>myTeams().includes(t));
+  if(a.scope==='atl')return r==='fam'&&a.ids.some(x=>FAM.kids.includes(x));
+  if(a.scope==='staff')return r==='coach';
+  return false;
+}
+function audLabel(a){
+  if(a.scope==='tutti')return'Tutta la società';
+  if(a.scope==='cat')return a.ids.map(t=>team(t).name).join(', ');
+  if(a.scope==='atl')return a.ids.length===1?ath(a.ids[0]).name:a.ids.length+' atleti';
+  if(a.scope==='staff')return'Allenatori';
+  return'Solo dirigenza';
+}
+function audRecipients(a){
+  if(a.scope==='tutti')return S.athletes;
+  if(a.scope==='cat')return S.athletes.filter(x=>a.ids.includes(x.team));
+  if(a.scope==='atl')return S.athletes.filter(x=>a.ids.includes(x.id));
+  return[];
+}
+const coachesOf=t=>COACHES.filter(c=>c.teams.includes(t)).map(c=>c.name).join(', ');
+
+/* ================= NAVIGAZIONE ================= */
+const TABS={
+  dir:[['home','Bacheca','home'],['team','Squadre','ball'],['seg','Segreteria','id'],['com','Comunica','bell'],['doc','Documenti','doc']],
+  coach:[['team','Squadra','ball'],['atl','Atleti','users'],['avv','Avvisi','bell'],['up','Condividi','up']],
+  fam:[['fhome','Home','home'],['fcal','Calendario','cal'],['avv','Avvisi','bell'],['fdoc','Documenti','doc'],['prof','Profilo','user']]
+};
+let view='home',teamSel='u10',teamTab='cal',convMatch=null,convSel=null,convEdit=false,risMatch=null,risScore=null,igFmt='post',segF='tutti',openF=0,kid='sofia',C=null;
+function go(v){view=v;convMatch=null;risMatch=null;render();window.scrollTo(0,0)}
+function setRole(p){P=p;const r=role();view=TABS[r][0][0];teamSel=myTeams()[0];teamTab='cal';convMatch=risMatch=null;openF=0;closeSheet();render();window.scrollTo(0,0)}
+function renderTop(){
+  const r=role(),lbl=r==='dir'?['Dirigenza','Matteo, presidente']:r==='coach'?['Area allenatore',coach().name+', '+coach().teams.map(t=>team(t).name).join(' e ')]:['Area famiglia',FAM.name];
+  $('#top').className='top '+r;
+  $('#top').innerHTML=`<div class="crest" aria-hidden="true">SC</div><h1 class="disp">San Carlo</h1>
+  <button class="who" data-a="who" aria-label="Cambia vista dimostrativa"><span>${esc(lbl[0])}<small>${esc(lbl[1])}</small></span>${ico('chev',16)}</button>`;
+}
+function renderNav(){const t=TABS[role()];$('#nav').style.gridTemplateColumns=`repeat(${t.length},1fr)`;
+  $('#nav').innerHTML=t.map(([id,l,i])=>`<button class="${view===id?'on':''}" data-a="tab" data-v="${id}" ${view===id?'aria-current="page"':''}>${ico(i,23)}<span>${l}</span></button>`).join('')}
+
+/* ================= COMPONENTI ================= */
+function evRow(e,right){return `<div class="item"><div class="stripe" style="background:${sColor(e.team)}"></div><div class="body"><div class="t">${esc(mTitle(e))}</div><div class="m">${e.time}, ${esc(team(e.team).name)}, ${esc(e.place)}</div></div>${right||''}</div>`}
+function evList(evs,rightFn){if(!evs.length)return'<div class="empty">Nessun impegno in programma.</div>';let h='',last='';
+  evs.forEach(e=>{if(e.date!==last){h+=`<div class="daylbl">${fmtDay(e.date)}</div>`;last=e.date}h+=`<div style="margin-bottom:8px">${evRow(e,rightFn?rightFn(e):(e.type==='partita'?'<span class="pill">Partita</span>':''))}</div>`});return h}
+function hero(e,extra){const s=team(e.team).sport;
+  return `<section class="hero ${s==='volley'?'volley':''}">${LINES[s]}<div class="when">${e.type==='partita'?'Prossima partita':'Prossimo impegno'}, ${fmtDay(e.date).toLowerCase()} alle ${e.time}</div>
+  ${e.type==='partita'?`<div class="vs disp">${esc(e.home?'San Carlo':e.opponent)}<i>vs</i>${esc(e.home?e.opponent:'San Carlo')}</div>`:`<div class="vs disp">${esc(mTitle(e))}</div>`}
+  <div class="meta"><span class="tag">${esc(team(e.team).name)}</span>${esc(e.place)}</div>${extra||''}</section>`}
+function postRow(p,showKid){const k=p.kind==='Risultato'?'ok':p.kind==='Comunicato'?'warn':'';
+  return `<button class="item" data-a="post" data-v="${p.id}"><div class="body"><div class="t">${esc(p.title)}</div><div class="m">${esc(p.from)}, ${fmtShort(p.at)}${showKid?', per '+esc(audLabel(p.aud)):''}</div></div><span class="pill ${k}">${esc(p.kind)}</span></button>`}
+const EXTC={PDF:'#C0392B',DOC:'#2B5797',XLS:'#1E7145',IMG:'#7A4FA0'};
+function fileRow(d,meta){return `<button class="file" data-a="docopen" data-v="${d.id}"><span class="ext" style="background:${EXTC[d.ext]||'#555'}">${d.ext}</span><span class="body">${esc(d.name)}<small>${esc(meta||(d.from+', '+fmtShort(d.at)))}</small></span>${d.isNew&&role()==='dir'?'<span class="pill warn">Nuovo</span>':''}</button>`}
+function folder(i,title,sub,inner){return `<div class="folder"><button data-a="fold" data-v="${i}" aria-expanded="${openF===i}"><span class="fi">${ico('doc')}</span><span style="flex:1"><b style="font-weight:500">${esc(title)}</b><br><small style="color:var(--muted)">${esc(sub)}</small></span><span aria-hidden="true">${openF===i?'−':'+'}</span></button>${openF===i?`<div>${inner||'<div class="empty">Cartella vuota.</div>'}</div>`:''}</div>`}
+function teamChips(list,cur,act){if(list.length<2)return'';return `<div class="chips" role="group" aria-label="Categoria">${list.map(t=>`<button class="chip ${cur===t?'on':''} ${team(t).sport==='calcio'?'c':''}" data-a="${act}" data-v="${t}">${esc(team(t).name)}</button>`).join('')}</div>`}
+function kidChips(){return `<div class="chips" role="group" aria-label="Figlio o figlia">${kids().map(k=>`<button class="chip ${kid===k.id?'on':''} ${team(k.team).sport==='calcio'?'c':''}" data-a="kid" data-v="${k.id}">${esc(k.name.split(' ')[0])}, ${esc(team(k.team).name)}</button>`).join('')}</div>`}
+function convCounts(c){let si=0,no=0;c.ids.forEach(id=>{const r=c.resp[id];if(r==='si')si++;else if(r==='no')no++});return{si,no,att:c.ids.length-si-no}}
+
+/* ================= DIRIGENZA: BACHECA ================= */
+function vHome(){
+  const next=S.events.filter(e=>e.type==='partita'&&e.date>=iso(0)).sort(sortAsc)[0];
+  const noRes=S.events.filter(e=>e.type==='partita'&&e.date<iso(0)&&!e.score);
+  const noConv=S.events.filter(e=>e.type==='partita'&&days(e.date)>=0&&days(e.date)<=7&&!(e.conv&&e.conv.sent));
+  const newDocs=S.docs.filter(d=>d.aud.scope==='dir'&&d.isNew);
+  const cert=S.athletes.filter(a=>certSt(a)[0]!=='ok');
+  let h='';
+  if(next){const c=next.conv&&next.conv.sent?convCounts(next.conv):null;
+    h+=hero(next,`<div class="row">${c?`<span class="tag">${c.si} presenti, ${c.no} assenti, ${c.att} in attesa</span>`:''}<button class="btn light sm" data-a="openconv" data-v="${next.id}">${c?'Vedi convocazione':'Prepara convocazione'}</button></div>`)}
+  const todo=[];
+  if(noRes.length)todo.push(`<button data-a="openris" data-v="${noRes[0].id}"><span class="n">${noRes.length}</span><span class="x">${noRes.length>1?'Risultati':'Risultato'} da inserire</span>${ico('chev',16)}</button>`);
+  if(noConv.length)todo.push(`<button data-a="openconv" data-v="${noConv[0].id}"><span class="n">${noConv.length}</span><span class="x">${noConv.length>1?'Convocazioni':'Convocazione'} da inviare entro la settimana</span>${ico('chev',16)}</button>`);
+  if(newDocs.length)todo.push(`<button data-a="gotodocs"><span class="n">${newDocs.length}</span><span class="x">${newDocs.length>1?'Documenti nuovi':'Documento nuovo'} da allenatori o famiglie</span>${ico('chev',16)}</button>`);
+  if(cert.length)todo.push(`<button data-a="gotoseg" data-v="cert"><span class="n">${cert.length}</span><span class="x">Certificati medici scaduti o in scadenza</span>${ico('chev',16)}</button>`);
+  h+=`<h2 class="sec">Da gestire</h2>${todo.length?`<div class="todo">${todo.join('')}</div>`:'<div class="empty">Tutto in ordine.</div>'}`;
+  h+=`<h2 class="sec">Le quattro categorie</h2><div class="list">${TEAMS.map(t=>{const n=S.athletes.filter(a=>a.team===t.id).length;return `<button class="item" data-a="openteam" data-v="${t.id}"><div class="stripe" style="background:${sColor(t.id)}"></div><div class="body"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.champ||'Attività senza campionato')}, ${n} atleti, ${esc(coachesOf(t.id))}</div></div>${ico('chev',16)}</button>`}).join('')}</div>`;
+  return h;
+}
+
+/* ================= SQUADRE (dirigenza e allenatori) ================= */
+function vTeam(){
+  const list=myTeams();if(!list.includes(teamSel))teamSel=list[0];
+  const t=team(teamSel);
+  let h=teamChips(list,teamSel,'tsel');
+  h+=`<div class="teamhead"><div class="disp">${esc(t.name)}</div><small>${esc(t.champ||'Attività senza campionato')}<br>${role()==='dir'?esc(coachesOf(t.id)):S.athletes.filter(a=>a.team===t.id).length+' atleti'}</small></div>`;
+  h+=`<div class="seg" role="group" aria-label="Sezione">${[['cal','Calendario'],['conv','Convocazioni'],['ris','Risultati']].map(([k,l])=>`<button class="${teamTab===k?'on':''}" data-a="ttab" data-v="${k}">${l}</button>`).join('')}</div>`;
+  if(teamTab==='cal'){
+    h+=`<div class="notebox"><span class="dot"></span>Le famiglie dell'${esc(t.name)} vedono questo calendario nella loro app, aggiornato in tempo reale.</div>`;
+    h+=evList(S.events.filter(e=>e.team===teamSel&&e.date>=iso(0)).sort(sortAsc));
+    h+=`<div class="stack"><button class="btn pri full" data-a="addev">Aggiungi un impegno</button></div>`;
+  }
+  if(teamTab==='conv')h+=convMatch?vConvDetail():vConvList();
+  if(teamTab==='ris')h+=risMatch?vRisDetail():vRisList();
+  return h;
+}
+function vConvList(){
+  const up=S.events.filter(e=>e.team===teamSel&&e.type==='partita'&&e.date>=iso(0)).sort(sortAsc);
+  if(!up.length)return `<div class="empty">${teamSel==='mv'?'Il minivolley non ha partite di campionato: per feste e tornei usa un avviso.':'Nessuna partita in programma.'}</div>`;
+  return `<div class="list">${up.map(e=>{const c=e.conv&&e.conv.sent?convCounts(e.conv):null;
+    return `<button class="item" data-a="conv" data-v="${e.id}"><div class="stripe" style="background:${sColor(e.team)}"></div><div class="body"><div class="t">${esc(mTitle(e))}</div><div class="m">${fmtDay(e.date)}, ${e.time}${c?`<br>${c.si} ci sono, ${c.no} assenti, ${c.att} in attesa`:''}</div></div>${c?'<span class="pill ok">Inviata</span>':'<span class="pill warn">Da inviare</span>'}</button>`}).join('')}</div>`;
+}
+function convText(e,sel,rit,nota){
+  const names=sel.map(id=>ath(id).name);
+  return `${team(e.team).sport==='calcio'?'⚽':'🏐'} Convocazione ${team(e.team).name}\n${mTitle(e)}\n📅 ${fmtDay(e.date)}, ore ${e.time}\n📍 ${e.place}\n⏰ Ritrovo: ${rit}\n\nConvocati (${names.length}): ${names.join(', ')}${nota?'\n\n'+nota:''}\n\nConfermate la presenza dall'app.`;
+}
+const defRit=e=>{const [h,m]=e.time.split(':').map(Number),x=h*60+m-45;return pad(Math.floor(x/60))+':'+pad(x%60)+(e.home?', al campo':", davanti all'oratorio")};
+function vConvDetail(){
+  const e=ev(convMatch),ros=S.athletes.filter(a=>a.team===e.team);
+  let h=`<button class="btn line sm" data-a="convback">‹ Tutte le partite</button><h2 class="sec" style="margin-top:14px;font-size:26px">${esc(mTitle(e))}</h2><p class="sub">${fmtDay(e.date)}, ${e.time}, ${esc(e.place)}</p>`;
+  if(e.conv&&e.conv.sent&&!convEdit){
+    const c=convCounts(e.conv);
+    h+=`<p style="margin:0 0 10px"><b style="font-weight:500">${c.si} ci sono, ${c.no} assenti, ${c.att} in attesa</b> su ${e.conv.ids.length} convocati</p>`;
+    h+=`<div class="roster">${e.conv.ids.map(id=>{const a=ath(id),r=e.conv.resp[id];return `<div class="ath"><span class="num">${a.num}</span><span class="n">${esc(a.name)}</span><span class="pill ${r==='si'?'ok':r==='no'?'bad':''}">${r==='si'?'C\u2019è':r==='no'?'Assente':'In attesa'}</span></div>`}).join('')}</div>`;
+    h+=`<div class="stack">${c.att?`<button class="btn pri full" data-a="remind">Sollecita chi non ha risposto</button>`:''}<button class="btn line full" data-a="editconv">Modifica convocazione</button></div>`;
+    return h;
+  }
+  if(!convSel)convSel=e.conv?[...e.conv.ids]:ros.map(a=>a.id);
+  const rit=e.conv?e.conv.ritrovo:defRit(e),nota=e.conv?e.conv.nota:'';
+  h+=`<div class="two"><div class="field"><label for="cRit">Ritrovo</label><input id="cRit" value="${esc(rit)}"></div><div class="field"><label for="cNota">Nota</label><input id="cNota" value="${esc(nota)}" placeholder="Es. maglia verde"></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 2px 8px"><b style="font-weight:500">Convocati: <span id="cCount">${convSel.length}</span> su ${ros.length}</b><button class="btn line sm" data-a="selall">${convSel.length===ros.length?'Deseleziona tutti':'Seleziona tutti'}</button></div>
+  <div class="roster">${ros.map(a=>{const cs=certSt(a);return `<label class="ath"><span class="num">${a.num}</span><span class="n">${esc(a.name)}${cs[0]==='bad'?'<small style="color:var(--rosso)">Certificato scaduto: non può giocare</small>':''}</span><input type="checkbox" data-ath="${a.id}" ${convSel.includes(a.id)?'checked':''}></label>`}).join('')}</div>
+  <h2 class="sec" style="font-size:24px">Anteprima</h2><div class="preview" id="cPrev">${esc(convText(e,convSel,rit,nota))}</div>
+  <div class="stack"><button class="btn pri full" data-a="sendconv">${e.conv?'Invia la convocazione aggiornata':'Invia convocazione'}</button></div>`;
+  return h;
+}
+function vRisList(){
+  const ms=S.events.filter(e=>e.team===teamSel&&e.type==='partita'&&e.date<iso(0)).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!ms.length)return `<div class="empty">${teamSel==='mv'?'Il minivolley non ha un campionato con risultati.':'Ancora nessuna partita giocata.'}</div>`;
+  return `<div class="list">${ms.map(e=>{const s=e.score;return `<button class="item" data-a="ris" data-v="${e.id}"><div class="stripe" style="background:${sColor(e.team)}"></div><div class="body"><div class="t">${esc(mTitle(e))}</div><div class="m">${fmtDay(e.date)}</div></div>${s?`<span class="score">${s[0]}–${s[1]}</span>`:'<span class="pill warn">Da inserire</span>'}</button>`}).join('')}</div>`;
+}
+function igSVG(e,fmt,sc){
+  const t=team(e.team),calcio=t.sport==='calcio',W=1080,H=fmt==='story'?1920:1080,st=fmt==='story';
+  const bg=calcio?'#006B35':'#273455',deep=calcio?'#004D26':'#1A2440';
+  const A=e.home?'San Carlo':e.opponent,B=e.home?e.opponent:'San Carlo',cy=H/2+(st?40:20);
+  const field=calcio?`<g transform="rotate(-16 ${W/2} ${cy}) translate(${W/2-620} ${cy-400})" stroke="#fff" stroke-opacity=".22" stroke-width="6" fill="none"><rect width="1240" height="800"/><path d="M620 0v800"/><circle cx="620" cy="400" r="150"/><rect y="200" width="200" height="400"/><rect x="1040" y="200" width="200" height="400"/></g>`
+    :`<g transform="rotate(-16 ${W/2} ${cy}) translate(${W/2-640} ${cy-330})" stroke="#fff" stroke-opacity=".22" stroke-width="6" fill="none"><rect width="1280" height="660"/><path d="M640 -40v740" stroke-width="16"/><path d="M420 0v660M860 0v660"/></g>`;
+  const fs=n=>n.length>16?72:n.length>11?92:116,fy=st?250:118;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Anteprima grafica del risultato"><defs><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0"/></filter></defs>
+  <rect width="${W}" height="${H}" fill="${bg}"/><path d="M0 ${H} L${W} ${H*.62} L${W} ${H} Z" fill="${deep}"/>${field}<rect width="${W}" height="${H}" filter="url(#g)" opacity=".28"/>
+  <rect x="80" y="${st?230:90}" width="120" height="14" fill="#C9A84C"/>
+  <text x="80" y="${st?310:170}" fill="#fff" font-family="DM Sans,sans-serif" font-size="38" font-weight="500">Risultato finale, ${esc(t.name)} ${esc(t.champ?t.champ.replace(/^(Polisportivo|Pallavolo) /,''):'')}</text>
+  <text x="80" y="${cy-150}" fill="#fff" font-family="Bebas Neue,Impact,sans-serif" font-size="${fs(A)}">${esc(A)}</text>
+  <text x="${W/2}" y="${cy+150}" text-anchor="middle" fill="#fff" font-family="Bebas Neue,Impact,sans-serif" font-size="330">${sc[0]}<tspan fill="#C9A84C" dx="20" dy="-30" font-size="200">–</tspan><tspan dx="20" dy="30">${sc[1]}</tspan></text>
+  <text x="${W-80}" y="${cy+300}" text-anchor="end" fill="#fff" font-family="Bebas Neue,Impact,sans-serif" font-size="${fs(B)}">${esc(B)}</text>
+  <circle cx="122" cy="${H-fy}" r="42" fill="${bg}" stroke="#C9A84C" stroke-width="5"/><text x="122" y="${H-fy+15}" text-anchor="middle" fill="#fff" font-family="Bebas Neue,Impact,sans-serif" font-size="44">SC</text>
+  <text x="190" y="${H-fy-6}" fill="#fff" font-family="DM Sans,sans-serif" font-size="32" font-weight="500">A.S.D. San Carlo Borromeo</text>
+  <text x="190" y="${H-fy+36}" fill="#fff" fill-opacity=".75" font-family="DM Sans,sans-serif" font-size="28" font-weight="300">${fmtShort(e.date)}, ${esc(e.place)}</text></svg>`;
+}
+function vRisDetail(){
+  const e=ev(risMatch);if(!risScore)risScore=e.score?[...e.score]:[0,0];
+  const L=e.home?['San Carlo',e.opponent]:[e.opponent,'San Carlo'];
+  let h=`<button class="btn line sm" data-a="risback">‹ Tutte le partite</button><p class="sub" style="margin:14px 0 10px">${fmtDay(e.date)}, ${esc(e.place)}</p>
+  <div class="scorebox">${[0,1].map(i=>`<div class="side"><div class="lbl">${esc(L[i])}</div><div class="stepper"><button data-a="sc" data-v="${i},-1" aria-label="Togli un punto a ${esc(L[i])}">−</button><output>${risScore[i]}</output><button data-a="sc" data-v="${i},1" aria-label="Aggiungi un punto a ${esc(L[i])}">+</button></div></div>`).join('<span class="disp" style="font-size:40px;color:var(--oro)">–</span>')}</div>`;
+  if(role()==='dir'){
+    h+=`<div class="seg" style="margin-top:14px" role="group" aria-label="Formato Instagram"><button class="${igFmt==='post'?'on':''}" data-a="fmt" data-v="post">Post 1:1</button><button class="${igFmt==='story'?'on':''}" data-a="fmt" data-v="story">Storia 9:16</button></div>
+    <div class="igframe ${igFmt}">${igSVG(e,igFmt,risScore)}</div>
+    <div class="stack"><button class="btn pri full" data-a="saveris">Salva e avvisa le famiglie</button><button class="btn blu full" data-a="pubig">${ico('ig',18)} Pubblica su Instagram</button></div>`;
+  }else{
+    h+=`<div class="stack"><button class="btn pri full" data-a="saveris">Salva il risultato</button></div><p class="note" style="margin-top:12px">Il risultato arriva subito alle famiglie della categoria. La dirigenza riceve la grafica pronta per Instagram e decide se pubblicarla.</p>`;
+  }
+  return h;
+}
+
+/* ================= SEGRETERIA (solo dirigenza) ================= */
+function issues(a){const r=[];const c=certSt(a);if(c[0]!=='ok')r.push(c);if(a.tess!=='attiva')r.push(['warn','Tesseramento da completare']);if(a.quota==='da versare')r.push(['bad','Quota da versare']);else if(a.quota!=='saldata')r.push(['','2ª rata da versare']);return r}
+function vSeg(){
+  const F={tutti:['Tutti',()=>true],cert:['Certificati',a=>certSt(a)[0]!=='ok'],tess:['Tesseramenti',a=>a.tess!=='attiva'],quota:['Quote',a=>a.quota!=='saldata']};
+  let h=`<h2 class="sec first">Segreteria</h2><p class="sub">Tesseramenti, certificati e quote di tutte le categorie in un unico posto.</p>
+  <div class="chips" role="group" aria-label="Filtro">${Object.entries(F).map(([k,[l,fn]])=>`<button class="chip ${segF===k?'on':''}" data-a="segf" data-v="${k}">${l} ${S.athletes.filter(fn).length}</button>`).join('')}</div>`;
+  TEAMS.forEach(t=>{const as=S.athletes.filter(a=>a.team===t.id&&F[segF][1](a));if(!as.length)return;
+    h+=`<div class="daylbl">${esc(t.name)}</div><div class="roster">${as.map(a=>{const is=issues(a);return `<button class="ath" data-a="ath" data-v="${a.id}"><span class="n">${esc(a.name)}<small>classe ${a.born}</small></span><span class="pills">${is.length?is.map(([c,l])=>`<span class="pill ${c}">${l}</span>`).join(''):'<span class="pill ok">In regola</span>'}</span></button>`}).join('')}</div>`});
+  return h;
+}
+function athSheet(id){
+  const a=ath(id),r=role(),c=certSt(a);
+  let h=`<h3>${esc(a.name)}</h3><p class="sub">${esc(team(a.team).name)}, classe ${a.born}, numero ${a.num}</p><dl class="dl">
+  <dt>Genitore</dt><dd>${esc(a.parent)}</dd><dt>Telefono</dt><dd><a href="tel:${a.phone.replace(/\s/g,'')}">${esc(a.phone)}</a></dd>
+  ${r==='dir'?`<dt>Email</dt><dd>${esc(a.email)}</dd>`:''}
+  <dt>Certificato medico</dt><dd><span class="pill ${c[0]}">${r==='dir'||c[0]!=='ok'?'Scade il '+fmtShort(a.cert):'Valido'}</span></dd>
+  <dt>Tesseramento CSI</dt><dd><span class="pill ${a.tess==='attiva'?'ok':'warn'}">${a.tess==='attiva'?'Attivo':'Da completare'}</span></dd>
+  ${r==='dir'?`<dt>Quota</dt><dd><span class="pill ${a.quota==='saldata'?'ok':a.quota==='da versare'?'bad':''}">${esc(a.quota[0].toUpperCase()+a.quota.slice(1))}</span></dd><dt>Documenti personali</dt><dd>${S.docs.filter(d=>d.aud.scope==='atl'&&d.aud.ids.includes(a.id)).length}</dd>`:''}
+  </dl>`;
+  h+=r==='dir'?`<div class="stack"><button class="btn pri full" data-a="athmsg" data-v="${a.id}">Scrivi alla famiglia</button><button class="btn line full" data-a="close">Chiudi</button></div>`
+    :`<p class="note" style="margin-top:14px">Come allenatore vedi solo i dati utili all'attività sportiva. Quote, email e documenti personali restano alla segreteria.</p><div class="stack"><button class="btn line full" data-a="close">Chiudi</button></div>`;
+  openSheet(h);
+}
+
+/* ================= COMUNICA (dirigenza) ================= */
+function vCom(){
+  const ps=[...S.posts].sort((a,b)=>b.at.localeCompare(a.at));
+  return `<h2 class="sec first">Comunica</h2><p class="sub">Ogni messaggio arriva solo a chi scegli: tutta la società, una categoria, singoli atleti o gli allenatori.</p>
+  <div class="two" style="margin-bottom:6px"><button class="btn pri" data-a="compose" data-v="Avviso">Nuovo avviso</button><button class="btn blu" data-a="compose" data-v="Comunicato">Nuovo comunicato</button></div>
+  <h2 class="sec">Inviati</h2><div class="list">${ps.map(p=>`<button class="item" data-a="post" data-v="${p.id}"><div class="body"><div class="t">${esc(p.title)}</div><div class="m">${esc(p.kind)} di ${esc(p.from)}, ${fmtShort(p.at)}</div></div><span class="pill">${esc(audLabel(p.aud))}</span></button>`).join('')}</div>`;
+}
+function compose(o){
+  C=Object.assign({kind:'Avviso',title:'',text:'',scope:'tutti',cats:[],atl:[],q:'',attach:null,isDoc:false},o);
+  if(role()==='coach'){C.scope='cat';if(!C.cats.length)C.cats=[...coach().teams]}
+  drawComposer();openSheet(null);
+}
+function drawComposer(){
+  const r=role(),scopes=r==='coach'?[['cat','Le mie squadre']]:[['tutti','Tutti'],['cat','Categorie'],['atl','Atleti'],['staff','Allenatori']];
+  const cats=r==='coach'?coach().teams:TEAMS.map(t=>t.id);
+  const al=S.athletes.filter(a=>!C.q||a.name.toLowerCase().includes(C.q.toLowerCase()));
+  const aud=audObj(),n=aud.scope==='staff'?COACHES.length:audRecipients(aud).length;
+  $('#sheetBody').innerHTML=`<h3>${C.isDoc?'Carica documento':esc(C.kind==='Avviso'?'Nuovo avviso':C.kind==='Comunicato'?'Nuovo comunicato':C.kind)}</h3>
+  <div class="field"><label for="mT">${C.isDoc?'Nome del documento':'Titolo'}</label><input id="mT" value="${esc(C.title)}" placeholder="${C.isDoc?'Es. Modulo autorizzazione trasferta':'Es. Allenamento annullato per maltempo'}"></div>
+  ${C.isDoc?`<div class="field"><label for="mF">File</label><input type="file" id="mF"></div>`:`<div class="field"><label for="mX">Messaggio</label><textarea id="mX" placeholder="Scrivi il testo">${esc(C.text)}</textarea></div>`}
+  <div class="field"><label>Chi lo vede</label>
+   ${scopes.length>1?`<div class="seg" style="margin:0 0 10px">${scopes.map(([k,l])=>`<button class="${C.scope===k?'on':''}" data-a="scope" data-v="${k}">${l}</button>`).join('')}</div>`:''}
+   ${C.scope==='cat'?`<div class="chips wrapc" style="margin:0">${cats.map(t=>`<button class="chip ${C.cats.includes(t)?'on':''} ${team(t).sport==='calcio'?'c':''}" data-a="ccat" data-v="${t}">${esc(team(t).name)}</button>`).join('')}</div>`:''}
+   ${C.scope==='atl'?`<input id="mQ" value="${esc(C.q)}" placeholder="Cerca un atleta" style="margin-bottom:8px"><div class="scroller">${al.map(a=>`<label class="ath"><span class="n">${esc(a.name)}<small>${esc(team(a.team).name)}</small></span><input type="checkbox" data-catl="${a.id}" ${C.atl.includes(a.id)?'checked':''}></label>`).join('')||'<div class="empty">Nessun atleta trovato.</div>'}</div>`:''}
+   <p class="note" style="margin:8px 2px 0">${aud.scope==='staff'?`Lo vedono i ${n} allenatori.`:`Lo vedono le famiglie di ${n} atleti${aud.scope==='atl'?'':' e i loro allenatori'}.`}</p>
+  </div>
+  ${C.isDoc?'':`<div class="field"><label>Notifica anche via</label><div class="chan"><label><input type="checkbox" id="chW" checked> WhatsApp</label><label><input type="checkbox" id="chE" checked> Email</label></div><p class="note" style="margin:6px 2px 0">Nell'app arriva sempre, con notifica sul telefono.</p></div>`}
+  <div class="stack"><button class="btn pri full" data-a="send">${C.isDoc?'Carica e condividi':'Invia'}</button><button class="btn line full" data-a="close">Annulla</button></div>`;
+}
+function audObj(){return C.scope==='cat'?{scope:'cat',ids:[...C.cats]}:C.scope==='atl'?{scope:'atl',ids:[...C.atl]}:{scope:C.scope,ids:[]}}
+function syncC(){const t=$('#mT'),x=$('#mX'),q=$('#mQ');if(t)C.title=t.value;if(x)C.text=x.value;if(q)C.q=q.value}
+function doSend(){
+  syncC();const aud=audObj();
+  if(!C.title.trim()){toast(C.isDoc?'Dai un nome al documento':'Scrivi un titolo');$('#mT').focus();return}
+  if((aud.scope==='cat'||aud.scope==='atl')&&!aud.ids.length){toast(aud.scope==='cat'?'Scegli almeno una categoria':'Scegli almeno un atleta');return}
+  const from=role()==='dir'?'Dirigenza':coach().name;
+  if(C.isDoc){const f=$('#mF')&&$('#mF').files[0],ext=f?(/\.pdf$/i.test(f.name)?'PDF':/\.xlsx?$/i.test(f.name)?'XLS':/\.(png|jpe?g|heic)$/i.test(f.name)?'IMG':'DOC'):'PDF';
+    S.docs.unshift({id:'d'+Date.now(),name:C.title.trim(),ext,aud,at:iso(0),from,isNew:false});save();closeSheet();render();toast('Documento condiviso con: '+audLabel(aud));return}
+  const w=$('#chW').checked,em=$('#chE').checked;
+  S.posts.unshift({id:'p'+Date.now(),kind:C.kind,title:C.title.trim(),text:C.text.trim(),aud,at:iso(0),from});save();
+  const rec=audRecipients(aud),body=C.title+'\n\n'+C.text;
+  const wa='https://wa.me/?text='+encodeURIComponent(body),mail='mailto:?bcc='+encodeURIComponent(rec.map(a=>a.email).join(','))+'&subject='+encodeURIComponent(C.title)+'&body='+encodeURIComponent(body);
+  openSheet(`<div class="done"><div class="big">Inviato</div><p>Visibile nell'app per: ${esc(audLabel(aud))}.</p></div><div class="stack">${w?`<a class="btn wa full" href="${wa}" target="_blank" rel="noopener">Apri in WhatsApp</a>`:''}${em&&rec.length?`<a class="btn blu full" href="${mail}" target="_blank" rel="noopener">Apri l'email già compilata</a>`:''}<button class="btn line full" data-a="close">Chiudi</button></div><p class="note" style="margin-top:14px">Nella demo WhatsApp ed email si aprono con il testo pronto. Nella versione completa partono in automatico.</p>`);
+  render();
+}
+function postSheet(id){const p=S.posts.find(x=>x.id===id);
+  openSheet(`<span class="pill">${esc(p.kind)}</span><h3 style="margin-top:10px">${esc(p.title)}</h3><p class="sub">${esc(p.from)}, ${fmtLong(p.at)}${role()!=='fam'?', per '+esc(audLabel(p.aud)):''}</p><p style="white-space:pre-wrap">${esc(p.text)}</p><div class="stack"><button class="btn line full" data-a="close">Chiudi</button></div>`)}
+
+/* ================= DOCUMENTI (dirigenza) ================= */
+function vDoc(){
+  const g=s=>S.docs.filter(d=>d.aud.scope===s);
+  const rec=g('dir'),nNew=rec.filter(d=>d.isNew).length;
+  return `<h2 class="sec first">Documenti</h2><div class="notebox"><span class="dot"></span>Nella versione completa ogni cartella corrisponde a una cartella Google Drive della società.</div>
+  ${folder(0,'Ricevuti',nNew?nNew+' nuovi da allenatori e famiglie':rec.length+' file da allenatori e famiglie',rec.map(d=>fileRow(d,d.from+(d.team?', '+team(d.team).name:'')+', '+fmtShort(d.at))).join(''))}
+  ${folder(1,'Società',g('tutti').length+' file visibili a tutti',g('tutti').map(d=>fileRow(d)).join(''))}
+  ${folder(2,'Categorie',g('cat').length+' file, ciascuno solo per la sua categoria',g('cat').map(d=>fileRow(d,audLabel(d.aud)+', '+fmtShort(d.at))).join(''))}
+  ${folder(3,'Personali atleti',g('atl').length+' file, visibili solo alla famiglia',g('atl').map(d=>fileRow(d,audLabel(d.aud))).join(''))}
+  ${folder(4,'Allenatori',g('staff').length+' file per lo staff',g('staff').map(d=>fileRow(d)).join(''))}
+  <div class="stack"><button class="btn pri full" data-a="docup">Carica un documento</button></div>`;
+}
+
+/* ================= ALLENATORE ================= */
+function vAtl(){
+  const list=coach().teams;if(!list.includes(teamSel))teamSel=list[0];
+  const as=S.athletes.filter(a=>a.team===teamSel);
+  return `${teamChips(list,teamSel,'tsel')}<h2 class="sec first">Atleti ${esc(team(teamSel).name)}</h2>
+  <div class="notebox"><span class="dot"></span>Vedi solo i dati utili all'attività: idoneità a giocare e contatto del genitore.</div>
+  <div class="roster">${as.map(a=>{const c=certSt(a);return `<button class="ath" data-a="ath" data-v="${a.id}"><span class="num">${a.num}</span><span class="n">${esc(a.name)}<small>classe ${a.born}</small></span><span class="pills">${c[0]!=='ok'?`<span class="pill ${c[0]}">${c[1].replace('Certificato ','Cert. ')}</span>`:''}${a.tess!=='attiva'?'<span class="pill warn">Non tesserato</span>':''}${c[0]==='ok'&&a.tess==='attiva'?'<span class="pill ok">Può giocare</span>':''}</span></button>`}).join('')}</div>`;
+}
+function vAvv(){
+  const ps=S.posts.filter(p=>canSee(p.aud)).sort((a,b)=>b.at.localeCompare(a.at));
+  let h=`<h2 class="sec first">Avvisi e comunicati</h2>`;
+  if(role()==='coach')h+=`<button class="btn pri full" data-a="compose" data-v="Avviso" style="margin-bottom:14px">Scrivi alle famiglie delle tue squadre</button>`;
+  return h+(ps.length?`<div class="list">${ps.map(p=>postRow(p,role()==='fam')).join('')}</div>`:'<div class="empty">Nessun avviso per ora.</div>');
+}
+function vUp(){
+  const c=coach(),mine=S.docs.filter(d=>d.fromId===c.id),forMe=S.docs.filter(d=>(d.aud.scope==='staff'||d.aud.scope==='cat')&&canSee(d.aud));
+  return `<h2 class="sec first">Condividi con la dirigenza</h2><p class="sub">Presenze, distinte, richieste di materiale, relazioni: arrivano nella cartella Ricevuti della segreteria.</p>
+  <div class="field"><label for="uT">Titolo</label><input id="uT" placeholder="Es. Presenze ottobre"></div>
+  <div class="two"><div class="field"><label for="uK">Tipo</label><select id="uK"><option>Presenze</option><option>Distinta gara</option><option>Richiesta materiale</option><option>Relazione</option><option>Altro</option></select></div>
+  <div class="field"><label for="uC">Categoria</label><select id="uC">${c.teams.map(t=>`<option value="${t}">${esc(team(t).name)}</option>`).join('')}</select></div></div>
+  <div class="field"><label for="uF">File</label><input type="file" id="uF"></div>
+  <button class="btn pri full" data-a="cup">Invia alla dirigenza</button>
+  <h2 class="sec">I tuoi invii</h2>${mine.length?`<div class="roster">${mine.map(d=>`<div class="file"><span class="ext" style="background:${EXTC[d.ext]||'#555'}">${d.ext}</span><span class="body">${esc(d.name)}<small>${esc(team(d.team).name)}, ${fmtShort(d.at)}</small></span><span class="pill ${d.isNew?'':'ok'}">${d.isNew?'Inviato':'Visto'}</span></div>`).join('')}</div>`:'<div class="empty">Non hai ancora condiviso nulla.</div>'}
+  <h2 class="sec">Documenti per te</h2><div class="roster">${forMe.map(d=>fileRow(d,audLabel(d.aud))).join('')}</div>`;
+}
+
+/* ================= FAMIGLIA ================= */
+function convCard(e,k){
+  const r=e.conv.resp[k.id],first=k.name.split(' ')[0];
+  return `<div class="kcard"><div class="who2"><b style="font-weight:500">${esc(first)} è nella convocazione</b><br><span class="note">${esc(mTitle(e))}, ${fmtDay(e.date).toLowerCase()} alle ${e.time}. Ritrovo ${esc(e.conv.ritrovo)}.${e.conv.nota?' '+esc(e.conv.nota)+'.':''}</span></div>
+  ${r?`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="pill ${r==='si'?'ok':'bad'}">${r==='si'?'Avete confermato la presenza':'Avete segnalato l\u2019assenza'}</span><button class="btn line sm" data-a="resp" data-v="${e.id},${k.id},">Cambia</button></div>`
+    :`<div class="resp"><button class="btn pri" data-a="resp" data-v="${e.id},${k.id},si">Ci sarà</button><button class="btn line" data-a="resp" data-v="${e.id},${k.id},no">Non può venire</button></div>`}</div>`;
+}
+function vFHome(){
+  const k=ath(kid),evs=S.events.filter(e=>e.team===k.team&&e.date>=iso(0)).sort(sortAsc);
+  const convs=evs.filter(e=>e.conv&&e.conv.sent&&e.conv.ids.includes(k.id));
+  const ps=S.posts.filter(p=>p.aud.scope==='tutti'||(p.aud.scope==='cat'&&p.aud.ids.includes(k.team))||(p.aud.scope==='atl'&&p.aud.ids.includes(k.id))).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,3);
+  let h=kidChips();
+  if(evs[0])h+=hero(evs[0]);
+  h+=convs.map(e=>convCard(e,k)).join('');
+  const cs=certSt(k);if(cs[0]!=='ok')h+=`<button class="item" data-a="tab" data-v="prof" style="margin-top:12px"><div class="stripe" style="background:var(--oro)"></div><div class="body"><div class="t">${cs[1]}</div><div class="m">Scade il ${fmtShort(k.cert)}. Puoi caricare il nuovo dal Profilo.</div></div>${ico('chev',16)}</button>`;
+  h+=`<h2 class="sec">Ultimi avvisi</h2>${ps.length?`<div class="list">${ps.map(p=>postRow(p)).join('')}</div>`:'<div class="empty">Nessun avviso.</div>'}`;
+  return h;
+}
+function vFCal(){const k=ath(kid);
+  return kidChips()+`<h2 class="sec first">Calendario ${esc(team(k.team).name)}</h2><p class="sub">${esc(team(k.team).champ||'Attività senza campionato')}</p>`+
+  evList(S.events.filter(e=>e.team===k.team&&e.date>=iso(0)).sort(sortAsc),e=>e.conv&&e.conv.sent&&e.conv.ids.includes(k.id)?'<span class="pill ok">Convocazione</span>':e.type==='partita'?'<span class="pill">Partita</span>':'');}
+function vFDoc(){
+  let i=0,h=`<h2 class="sec first">Documenti</h2>`;
+  kids().forEach(k=>{const ds=S.docs.filter(d=>d.aud.scope==='atl'&&d.aud.ids.includes(k.id));h+=folder(i++,'Di '+k.name.split(' ')[0],ds.length+' file personali',ds.map(d=>fileRow(d,fmtShort(d.at))).join(''))});
+  const cats=S.docs.filter(d=>d.aud.scope==='cat'&&canSee(d.aud));h+=folder(i++,'Categorie',cats.length+' file',cats.map(d=>fileRow(d,audLabel(d.aud))).join(''));
+  const soc=S.docs.filter(d=>d.aud.scope==='tutti');h+=folder(i++,'Società',soc.length+' file',soc.map(d=>fileRow(d,fmtShort(d.at))).join(''));
+  return h;
+}
+function vProf(){
+  const k=ath(kid),t=team(k.team),c=certSt(k);
+  return kidChips()+`<section class="hero ${t.sport==='volley'?'volley':''}">${LINES[t.sport]}<div class="when">${esc(t.name)}, ${esc(t.champ||'attività senza campionato')}</div><div class="vs disp">${esc(k.name)}</div><div class="meta">Numero ${k.num}, classe ${k.born}</div></section>
+  <div class="kcard"><dl class="dl">
+   <dt>Tesseramento CSI</dt><dd><span class="pill ${k.tess==='attiva'?'ok':'warn'}">${k.tess==='attiva'?'Attivo':'Da completare'}</span></dd>
+   <dt>Certificato medico</dt><dd><span class="pill ${c[0]}">Scade il ${fmtShort(k.cert)}</span></dd>
+   <dt>Quota</dt><dd><span class="pill ${k.quota==='saldata'?'ok':k.quota==='da versare'?'bad':''}">${esc(k.quota[0].toUpperCase()+k.quota.slice(1))}</span></dd>
+   <dt>Allenatore</dt><dd>${esc(coachesOf(k.team))}</dd>
+   <dt>Contatto</dt><dd>${esc(k.parent)}</dd>
+  </dl></div>
+  <div class="field" style="margin-top:16px"><label for="certF">Carica il nuovo certificato medico</label><input type="file" id="certF" accept="image/*,.pdf"></div>
+  <button class="btn pri full" data-a="certup">Invia alla segreteria</button>
+  <p class="note" style="margin-top:12px">Quello che carichi qui lo vede solo la segreteria. All'allenatore arriva soltanto l'esito: può giocare o no.</p>`;
+}
+
+/* ================= SHEET E RENDER ================= */
+function openSheet(html){if(html!==null)$('#sheetBody').innerHTML=html;$('#scrim').classList.add('open');$('#sheet').classList.add('open');document.body.style.overflow='hidden'}
+function closeSheet(){$('#scrim').classList.remove('open');$('#sheet').classList.remove('open');document.body.style.overflow=''}
+function render(){
+  renderTop();renderNav();
+  const V={home:vHome,team:vTeam,seg:vSeg,com:vCom,doc:vDoc,atl:vAtl,avv:vAvv,up:vUp,fhome:vFHome,fcal:vFCal,fdoc:vFDoc,prof:vProf};
+  $('#main').innerHTML=(V[view]||vHome)();
+}
+function whoSheet(){
+  const opts=[['dir','Dirigenza','Vede e gestisce tutto','var(--blu)'],...COACHES.map(c=>[c.id,'Allenatore: '+c.name,c.teams.map(t=>team(t).name).join(' e '),'#1F4A3A']),['fam',FAM.name,'Sofia (Under 13) e Luca (Under 10)','var(--verde)']];
+  openSheet(`<h3>Prova l'app come</h3><p class="sub">Nella versione reale ognuno entra con il proprio account e vede solo la sua area.</p>${opts.map(([id,l,s,c])=>`<button class="roleopt ${P===id?'on':''}" data-a="setwho" data-v="${id}"><span class="sw" style="background:${c}"></span><span><b style="font-weight:500">${esc(l)}</b><br><small style="color:var(--muted)">${esc(s)}</small></span></button>`).join('')}
+  <button class="btn line full" data-a="reset" style="margin-top:8px">Ripristina i dati di esempio</button>`);
+}
+
+/* ================= EVENTI ================= */
+document.addEventListener('click',evt=>{
+  const b=evt.target.closest('[data-a]');if(!b)return;
+  const a=b.dataset.a,v=b.dataset.v;
+  switch(a){
+    case 'tab':go(v);break;
+    case 'who':whoSheet();break;
+    case 'setwho':setRole(v);break;
+    case 'reset':S=seed();save();setRole('dir');toast('Dati di esempio ripristinati');break;
+    case 'tsel':teamSel=v;convMatch=risMatch=null;render();break;
+    case 'ttab':teamTab=v;convMatch=risMatch=null;render();break;
+    case 'openteam':teamSel=v;teamTab='cal';go('team');break;
+    case 'openconv':{const e=ev(v);view='team';teamSel=e.team;teamTab='conv';convMatch=v;convSel=null;convEdit=false;render();scrollTo(0,0);break}
+    case 'openris':{const e=ev(v);view='team';teamSel=e.team;teamTab='ris';risMatch=v;risScore=null;render();scrollTo(0,0);break}
+    case 'gotodocs':openF=0;go('doc');break;
+    case 'gotoseg':segF=v;go('seg');break;
+    case 'conv':convMatch=v;convSel=null;convEdit=false;render();scrollTo(0,0);break;
+    case 'convback':convMatch=null;convSel=null;convEdit=false;render();break;
+    case 'editconv':convEdit=true;convSel=null;render();break;
+    case 'selall':{const ros=S.athletes.filter(x=>x.team===ev(convMatch).team);convSel=convSel.length===ros.length?[]:ros.map(x=>x.id);render();break}
+    case 'sendconv':{const e=ev(convMatch);if(!convSel.length){toast('Seleziona almeno un convocato');return}
+      const rit=$('#cRit').value,nota=$('#cNota').value,old=e.conv?e.conv.resp:{},resp={};convSel.forEach(id=>{if(old[id])resp[id]=old[id]});
+      e.conv={sent:true,ids:[...convSel],resp,ritrovo:rit,nota};save();convEdit=false;
+      const txt=convText(e,convSel,rit,nota),mail='mailto:?bcc='+encodeURIComponent(convSel.map(id=>ath(id).email).join(','))+'&subject='+encodeURIComponent('Convocazione '+team(e.team).name)+'&body='+encodeURIComponent(txt);
+      openSheet(`<div class="done"><div class="big">Convocazione inviata</div><p>${convSel.length} famiglie la trovano nell'app e confermano la presenza con un tocco.</p></div><div class="stack"><a class="btn wa full" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Pubblica anche nel gruppo WhatsApp</a><a class="btn blu full" href="${mail}" target="_blank" rel="noopener">Apri l'email già compilata</a><button class="btn line full" data-a="close">Chiudi</button></div>`);render();break}
+    case 'remind':{const n=convCounts(ev(convMatch).conv).att;toast('Promemoria inviato a '+n+' famiglie');break}
+    case 'ris':risMatch=v;risScore=null;render();scrollTo(0,0);break;
+    case 'risback':risMatch=null;render();break;
+    case 'sc':{const [i,d]=v.split(',').map(Number);risScore[i]=Math.max(0,risScore[i]+d);render();break}
+    case 'fmt':igFmt=v;render();break;
+    case 'saveris':{const e=ev(risMatch);e.score=[...risScore];
+      S.posts.unshift({id:'p'+Date.now(),kind:'Risultato',title:`${mTitle(e)} ${risScore[0]}–${risScore[1]}`,text:`Risultato finale della partita ${team(e.team).name} di ${fmtDay(e.date).toLowerCase()}.`,aud:{scope:'cat',ids:[e.team]},at:iso(0),from:role()==='dir'?'Dirigenza':coach().name});
+      save();risMatch=null;render();toast('Risultato salvato e visibile alle famiglie dell\u2019'+team(e.team).name);break}
+    case 'pubig':{const e=ev(risMatch);e.score=[...risScore];save();
+      openSheet(`<div class="done"><div class="big" style="color:#DD2A7B">${igFmt==='post'?'Post':'Storia'} pronta</div><p>Pubblicazione su Instagram registrata.</p></div><p class="note">Nella versione completa la grafica parte direttamente sul profilo della società, con la didascalia scelta qui.</p><div class="stack"><button class="btn line full" data-a="close">Chiudi</button></div>`);break}
+    case 'addev':openSheet(`<h3>Nuovo impegno</h3><p class="sub">${esc(team(teamSel).name)}</p>
+      <div class="field"><label for="nK">Tipo</label><select id="nK"><option value="allenamento">Allenamento</option><option value="partita">Partita</option><option value="evento">Evento</option></select></div>
+      <div class="two"><div class="field"><label for="nD">Data</label><input type="date" id="nD" value="${iso(1)}"></div><div class="field"><label for="nH">Ora</label><input type="time" id="nH" value="17:00"></div></div>
+      <div class="field"><label for="nO">Avversario o nome dell'evento</label><input id="nO" placeholder="Es. Oratorio Arosio"></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><input type="checkbox" id="nH2" checked style="accent-color:var(--verde);width:18px;height:18px"> In casa</label>
+      <div class="stack"><button class="btn pri full" data-a="saveev">Aggiungi al calendario</button><button class="btn line full" data-a="close">Annulla</button></div>`);break;
+    case 'saveev':{const k=$('#nK').value,o=$('#nO').value.trim(),home=$('#nH2').checked,s=team(teamSel).sport;
+      if(k!=='allenamento'&&!o){toast(k==='partita'?'Scrivi il nome dell\u2019avversario':'Dai un nome all\u2019evento');return}
+      S.events.push({id:'e'+Date.now(),team:teamSel,type:k,date:$('#nD').value,time:$('#nH').value,opponent:k==='partita'?o:'',title:k==='evento'?o:'',home,place:k==='partita'&&!home?'Trasferta, '+o.split(' ').slice(-1)[0]:HOME[s],score:null,conv:null});
+      save();closeSheet();render();toast('Aggiunto: lo vedono subito le famiglie');break}
+    case 'segf':segF=v;render();break;
+    case 'ath':athSheet(v);break;
+    case 'athmsg':{const x=ath(v);compose({scope:'atl',atl:[v],title:'',text:'Gentile '+x.parent.split(' ')[0]+', '});break}
+    case 'compose':compose({kind:v});break;
+    case 'scope':syncC();C.scope=v;drawComposer();break;
+    case 'ccat':{syncC();const i=C.cats.indexOf(v);i<0?C.cats.push(v):C.cats.splice(i,1);drawComposer();break}
+    case 'send':doSend();break;
+    case 'post':postSheet(v);break;
+    case 'fold':openF=openF===+v?-1:+v;render();break;
+    case 'docopen':{const d=S.docs.find(x=>x.id===v);if(role()==='dir'&&d.isNew){d.isNew=false;save();render()}toast('Si apre «'+d.name+'» su Google Drive');break}
+    case 'docup':compose({isDoc:true});break;
+    case 'cup':{const t=$('#uT').value.trim(),f=$('#uF').files[0];if(!t){toast('Scrivi un titolo');$('#uT').focus();return}
+      const ext=f?(/\.pdf$/i.test(f.name)?'PDF':/\.xlsx?$/i.test(f.name)?'XLS':/\.(png|jpe?g|heic)$/i.test(f.name)?'IMG':'DOC'):'PDF';
+      S.docs.unshift({id:'d'+Date.now(),name:$('#uK').value+': '+t,ext,aud:{scope:'dir',ids:[]},at:iso(0),from:coach().name,fromId:coach().id,team:$('#uC').value,isNew:true});save();render();toast('Inviato alla dirigenza');break}
+    case 'kid':kid=v;render();break;
+    case 'resp':{const [eid,aid,r]=v.split(',');const e=ev(eid);if(r)e.conv.resp[aid]=r;else delete e.conv.resp[aid];save();render();if(r)toast(r==='si'?'Presenza confermata: l\u2019allenatore lo vede subito':'Assenza segnalata all\u2019allenatore');break}
+    case 'certup':{const f=$('#certF').files[0];if(!f){toast('Scegli prima il file del certificato');return}const k=ath(kid);
+      S.docs.unshift({id:'d'+Date.now(),name:'Certificato medico '+k.name,ext:/\.pdf$/i.test(f.name)?'PDF':'IMG',aud:{scope:'dir',ids:[]},at:iso(0),from:FAM.name,team:k.team,isNew:true});save();render();toast('Certificato inviato alla segreteria');break}
+    case 'close':closeSheet();break;
+  }
+});
+document.addEventListener('change',evt=>{
+  const t=evt.target;
+  if(t.dataset.ath&&convSel){t.checked?convSel.push(t.dataset.ath):convSel=convSel.filter(x=>x!==t.dataset.ath);
+    const e=ev(convMatch),ros=S.athletes.filter(x=>x.team===e.team);$('#cCount').textContent=convSel.length;
+    $('#cPrev').textContent=convText(e,convSel,$('#cRit').value,$('#cNota').value);$('[data-a="selall"]').textContent=convSel.length===ros.length?'Deseleziona tutti':'Seleziona tutti'}
+  if(t.dataset.catl){syncC();const id=t.dataset.catl;t.checked?C.atl.push(id):C.atl=C.atl.filter(x=>x!==id);
+    const n=$('#sheetBody .note');if(n)n.textContent='Lo vedono le famiglie di '+C.atl.length+' atleti.'}
+});
+document.addEventListener('input',evt=>{
+  const id=evt.target.id;
+  if((id==='cRit'||id==='cNota')&&convMatch)$('#cPrev').textContent=convText(ev(convMatch),convSel,$('#cRit').value,$('#cNota').value);
+  if(id==='mQ'){syncC();const pos=evt.target.selectionStart;drawComposer();const q=$('#mQ');q.focus();q.setSelectionRange(pos,pos)}
+});
+$('#scrim').addEventListener('click',closeSheet);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+render();
+</script>
+</body>
+</html>
